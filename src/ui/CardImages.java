@@ -40,30 +40,21 @@ public class CardImages {
     }
 
     private static ImageIcon createCardBack() {
-        int w = 100;
-        int h = 145;
+        int w = UIConstants.CARD_WIDTH;
+        int h = UIConstants.CARD_HEIGHT;
         BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = img.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g2 = GraphicsUtil.createAntialiasedGraphics(img.createGraphics());
 
-        // White border
-        g2.setColor(Color.WHITE);
-        g2.fillRoundRect(0, 0, w - 1, h - 1, 16, 16);
-
-        // Red/blue pattern background
-        g2.setColor(new Color(0, 51, 153)); // Dark blue
-        g2.fillRoundRect(4, 4, w - 9, h - 9, 14, 14);
+        // Draw card with blue background
+        GraphicsUtil.drawCard(g2, w, h, UIConstants.CARD_CORNER_RADIUS, UIConstants.CARD_BACK_BLUE);
 
         // Add a pattern
-        g2.setColor(new Color(204, 0, 0)); // Red
+        g2.setColor(UIConstants.CARD_BACK_RED);
         for (int i = 10; i < w - 10; i += 15) {
             for (int j = 10; j < h - 10; j += 15) {
                 g2.fillOval(i, j, 8, 8);
             }
         }
-
-        g2.setColor(Color.BLACK);
-        g2.drawRoundRect(0, 0, w - 1, h - 1, 16, 16);
 
         g2.dispose();
 
@@ -81,33 +72,7 @@ public class CardImages {
     }
 
     private static String getCode(Card card) {
-        String r;
-        switch (card.getRank()) {
-            case ACE: r = "ace"; break;
-            case TWO: r = "2"; break;
-            case THREE: r = "3"; break;
-            case FOUR: r = "4"; break;
-            case FIVE: r = "5"; break;
-            case SIX: r = "6"; break;
-            case SEVEN: r = "7"; break;
-            case EIGHT: r = "8"; break;
-            case NINE: r = "9"; break;
-            case TEN: r = "10"; break;
-            case JACK: r = "jack"; break;
-            case QUEEN: r = "queen"; break;
-            case KING: r = "king"; break;
-            default: r = "?";
-        }
-
-        String s;
-        switch (card.getSuit()) {
-            case HEARTS: s = "hearts"; break;
-            case DIAMONDS: s = "diamonds"; break;
-            case CLUBS: s = "clubs"; break;
-            case SPADES: s = "spades"; break;
-            default: s = "?";
-        }
-        return r + "_of_" + s;
+        return card.getRank().getDisplayName() + "_of_" + card.getSuit().getDisplayName();
     }
 
     private static ImageIcon loadCardIcon(String code) {
@@ -116,8 +81,7 @@ public class CardImages {
 
         if (f != null && f.exists()) {
             ImageIcon icon = new ImageIcon(f.getPath());
-            // Scale the image to a reasonable size (100x145 pixels)
-            return scaleIcon(icon, 100, 145);
+            return scaleIcon(icon, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
         } else {
             // Debug: print when file not found and working directory
             System.err.println("Card image not found: " + filename);
@@ -128,23 +92,16 @@ public class CardImages {
     }
 
     private static ImageIcon createPlaceholder(String text, Color tint) {
-        int w = 100;
-        int h = 145;
+        int w = UIConstants.CARD_WIDTH;
+        int h = UIConstants.CARD_HEIGHT;
         BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = img.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g2 = GraphicsUtil.createAntialiasedGraphics(img.createGraphics());
 
-        g2.setColor(Color.WHITE);
-        g2.fillRoundRect(0, 0, w - 1, h - 1, 16, 16);
+        // Draw card with tint color
+        GraphicsUtil.drawCard(g2, w, h, UIConstants.CARD_CORNER_RADIUS, tint);
 
-        g2.setColor(tint);
-        g2.fillRoundRect(4, 4, w - 9, h - 9, 14, 14);
-
-        g2.setColor(Color.BLACK);
-        g2.drawRoundRect(0, 0, w - 1, h - 1, 16, 16);
-
-        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
+        // Draw text
+        g2.setFont(new Font("SansSerif", Font.BOLD, UIConstants.FONT_SIZE_NORMAL));
         g2.setColor(Color.WHITE);
         int strW = g2.getFontMetrics().stringWidth(text);
         g2.drawString(text, (w - strW) / 2, h / 2);

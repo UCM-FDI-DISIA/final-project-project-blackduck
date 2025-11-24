@@ -4,6 +4,7 @@ import data.Card;
 import data.ChipsDatabase;
 import logic.Deck;
 import logic.Hand;
+import static ui.UIConstants.*;
 
 import javax.swing.*;
 import javax.sound.sampled.*;
@@ -123,7 +124,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         // Title
         JLabel titleLabel = new JLabel("BLACKDUCK", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 42));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_TITLE));
         titleLabel.setForeground(Color.WHITE);
 
         // Logo
@@ -159,6 +160,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         RedButton quitButton = new RedButton("Quit");
 
         startButton.addActionListener(e -> {
+            updateStatsDisplay(); // Update chips display with current value from database
             cardLayout.show(cardPanel, "GAME");
         });
 
@@ -204,14 +206,14 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 10));
         statsPanel.setOpaque(false);
 
-        chipsLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        chipsLabel.setForeground(new Color(255, 215, 0)); // Gold color
+        chipsLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_LARGE));
+        chipsLabel.setForeground(CHIPS_GOLD); // Gold color
 
-        winStreakLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        winStreakLabel.setForeground(new Color(50, 205, 50)); // Lime green
+        winStreakLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_LARGE));
+        winStreakLabel.setForeground(WIN_STREAK_GREEN); // Lime green
 
-        betLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        betLabel.setForeground(new Color(255, 100, 100)); // Light red
+        betLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_LARGE));
+        betLabel.setForeground(BET_RED); // Light red
 
         statsPanel.add(chipsLabel);
         statsPanel.add(winStreakLabel);
@@ -267,11 +269,11 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         JPanel dealerPanel = new JPanel(new BorderLayout());
         dealerPanel.setOpaque(false);
         JLabel dealerLabel = new JLabel("Dealer");
-        dealerLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        dealerLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         dealerLabel.setForeground(Color.WHITE);
         dealerCardsPanel.setOpaque(false);
         dealerValueLabel.setForeground(Color.LIGHT_GRAY);
-        dealerValueLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        dealerValueLabel.setFont(new Font("SansSerif", Font.PLAIN, FONT_SIZE_NORMAL));
 
         dealerPanel.add(dealerLabel, BorderLayout.NORTH);
         dealerPanel.add(dealerCardsPanel, BorderLayout.CENTER);
@@ -281,11 +283,11 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         JPanel playerPanel = new JPanel(new BorderLayout());
         playerPanel.setOpaque(false);
         JLabel playerLabel = new JLabel("Player");
-        playerLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        playerLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         playerLabel.setForeground(Color.WHITE);
         playerCardsPanel.setOpaque(false);
         playerValueLabel.setForeground(Color.LIGHT_GRAY);
-        playerValueLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        playerValueLabel.setFont(new Font("SansSerif", Font.PLAIN, FONT_SIZE_NORMAL));
 
         playerPanel.add(playerLabel, BorderLayout.NORTH);
         playerPanel.add(playerCardsPanel, BorderLayout.CENTER);
@@ -318,7 +320,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         statusLabel.setForeground(Color.WHITE);
-        statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        statusLabel.setFont(new Font("SansSerif", Font.PLAIN, FONT_SIZE_NORMAL));
         bottomPanel.add(statusLabel, BorderLayout.NORTH);
         bottomPanel.add(bettingPanel, BorderLayout.CENTER);
         bottomPanel.add(controlsPanel, BorderLayout.SOUTH);
@@ -355,13 +357,13 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         // Title
         JLabel titleLabel = new JLabel("SETTINGS", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 38));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_SUBTITLE));
         titleLabel.setForeground(Color.WHITE);
 
         // Chips display
         JLabel settingsChipsLabel = new JLabel("Your Chips: $" + chips, SwingConstants.CENTER);
-        settingsChipsLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        settingsChipsLabel.setForeground(new Color(255, 215, 0));
+        settingsChipsLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_LARGE));
+        settingsChipsLabel.setForeground(CHIPS_GOLD);
 
         JPanel topPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         topPanel.setOpaque(false);
@@ -385,7 +387,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         difficultyPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
 
         JLabel difficultyTitleLabel = new JLabel("Difficulty", SwingConstants.CENTER);
-        difficultyTitleLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        difficultyTitleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         difficultyTitleLabel.setForeground(Color.WHITE);
         difficultyTitleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
@@ -419,7 +421,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         luckPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
 
         JLabel luckTitleLabel = new JLabel("Luck Level", SwingConstants.CENTER);
-        luckTitleLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        luckTitleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         luckTitleLabel.setForeground(Color.WHITE);
         luckTitleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
@@ -461,7 +463,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         greenTablePanel.setBackground(new Color(30, 30, 30, 150));
 
         JLabel greenTableLabel = new JLabel("<html><center>Green Poker Table<br/>Cost: $150</center></html>", SwingConstants.CENTER);
-        greenTableLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        greenTableLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         greenTableLabel.setForeground(Color.WHITE);
         greenTableLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -494,9 +496,9 @@ public class BlackjackGUI extends JFrame implements ActionListener {
                 greenButtonPanel.add(equipGreenButton);
                 greenButtonPanel.revalidate();
                 greenButtonPanel.repaint();
-                JOptionPane.showMessageDialog(this, "Green Poker Table purchased!", "Purchase Successful", JOptionPane.INFORMATION_MESSAGE);
+                showSuccess("Green Poker Table purchased!");
             } else if (chips < 150) {
-                JOptionPane.showMessageDialog(this, "Not enough chips! You need $150.", "Insufficient Funds", JOptionPane.WARNING_MESSAGE);
+                showWarning("Not enough chips! You need $150.");
             }
         });
 
@@ -508,7 +510,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             greenButtonPanel.add(unequipGreenButton);
             greenButtonPanel.revalidate();
             greenButtonPanel.repaint();
-            JOptionPane.showMessageDialog(this, "Green Poker Table equipped!", "Equipped", JOptionPane.INFORMATION_MESSAGE);
+            showSuccess("Green Poker Table equipped!");
         });
 
         unequipGreenButton.addActionListener(e -> {
@@ -519,7 +521,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             greenButtonPanel.add(equipGreenButton);
             greenButtonPanel.revalidate();
             greenButtonPanel.repaint();
-            JOptionPane.showMessageDialog(this, "Background reset to default.", "Unequipped", JOptionPane.INFORMATION_MESSAGE);
+            showSuccess("Background reset to default.");
         });
 
         greenTablePanel.add(greenTableLabel, BorderLayout.CENTER);
@@ -531,7 +533,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         defaultPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
 
         JLabel defaultLabel = new JLabel("<html><center>Default Dark Background<br/>Always Available</center></html>", SwingConstants.CENTER);
-        defaultLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        defaultLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         defaultLabel.setForeground(Color.WHITE);
         defaultLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -541,7 +543,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         if (currentBackground.equals("default")) {
             JLabel equippedLabel = new JLabel("Currently Equipped");
-            equippedLabel.setForeground(new Color(50, 205, 50));
+            equippedLabel.setForeground(WIN_STREAK_GREEN);
             equippedLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
             defaultButtonPanel.add(equippedLabel);
         } else {
@@ -552,7 +554,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             currentBackground = "default";
             database.saveCurrentBackground("default");
             updateGameBackground();
-            JOptionPane.showMessageDialog(this, "Default background equipped!", "Equipped", JOptionPane.INFORMATION_MESSAGE);
+            showSuccess("Default background equipped!");
             // Refresh settings panel
             cardLayout.show(cardPanel, "MENU");
             cardLayout.show(cardPanel, "SETTINGS");
@@ -576,8 +578,8 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         purchaseChipsPanel.setBackground(new Color(30, 30, 30, 150));
 
         JLabel purchaseLabel = new JLabel("<html><center>Purchase Virtual Chips<br/>Buy chips with test payment</center></html>", SwingConstants.CENTER);
-        purchaseLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        purchaseLabel.setForeground(new Color(255, 215, 0));
+        purchaseLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
+        purchaseLabel.setForeground(CHIPS_GOLD);
         purchaseLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         RedButton buyChipsButton = new RedButton("Buy Chips");
@@ -634,11 +636,24 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
     private void updateGameBackground() {
         if (currentBackground.equals("green_table")) {
-            gamePanel.setBackground(new Color(0, 100, 0)); // Green poker table color
+            gamePanel.setBackground(POKER_TABLE_GREEN);
         } else {
-            gamePanel.setBackground(new Color(20, 20, 20)); // Default dark
+            gamePanel.setBackground(BACKGROUND_MEDIUM_DARK);
         }
         gamePanel.repaint();
+    }
+
+    // Helper methods to reduce JOptionPane repetition
+    private void showSuccess(String message) {
+        JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showWarning(String message) {
+        JOptionPane.showMessageDialog(this, message, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 
     // ---------- GAME LOGIC / ACTIONS ----------

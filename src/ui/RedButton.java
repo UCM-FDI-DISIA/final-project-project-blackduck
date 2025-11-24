@@ -10,9 +10,9 @@ public class RedButton extends JButton {
         super(text);
         setFocusPainted(false);
         setForeground(Color.WHITE);
-        setBackground(new Color(200, 0, 0));
-        setFont(new Font("SansSerif", Font.BOLD, 20));
-        setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        setBackground(UIConstants.BUTTON_RED);
+        setFont(new Font("SansSerif", Font.BOLD, UIConstants.FONT_SIZE_BUTTON));
+        setBorder(BorderFactory.createEmptyBorder(UIConstants.SPACING_SMALL, 30, UIConstants.SPACING_SMALL, 30));
         setContentAreaFilled(false);
         setOpaque(false);
 
@@ -20,12 +20,12 @@ public class RedButton extends JButton {
         addMouseListener(new java.awt.event.MouseAdapter() {
             @SuppressWarnings("override")
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                setBackground(new Color(230, 0, 0));
+                setBackground(UIConstants.BUTTON_RED_HOVER);
                 repaint();
             }
             @SuppressWarnings("override")
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                setBackground(new Color(200, 0, 0));
+                setBackground(UIConstants.BUTTON_RED);
                 repaint();
             }
         });
@@ -33,12 +33,10 @@ public class RedButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g2 = GraphicsUtil.createAntialiasedGraphics(g);
 
         g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), UIConstants.BUTTON_CORNER_RADIUS, UIConstants.BUTTON_CORNER_RADIUS);
 
         super.paintComponent(g);
         g2.dispose();

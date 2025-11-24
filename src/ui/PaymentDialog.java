@@ -39,16 +39,16 @@ public class PaymentDialog extends JDialog {
 
         // Title panel
         JPanel titlePanel = new JPanel();
-        titlePanel.setBackground(new Color(40, 40, 40));
+        titlePanel.setBackground(UIConstants.BACKGROUND_PANEL_LIGHT);
         JLabel titleLabel = new JLabel("Virtual Currency Purchase");
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, UIConstants.FONT_SIZE_MEDIUM));
         titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel);
 
         // Main form panel
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(new Color(30, 30, 30));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        formPanel.setBackground(UIConstants.BACKGROUND_PANEL);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(UIConstants.SPACING_MEDIUM, UIConstants.SPACING_MEDIUM, UIConstants.SPACING_MEDIUM, UIConstants.SPACING_MEDIUM));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -111,13 +111,13 @@ public class PaymentDialog extends JDialog {
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         JLabel testInfoLabel = new JLabel("<html><center><i>TEST ENVIRONMENT - Use test cards only</i></center></html>");
-        testInfoLabel.setForeground(new Color(255, 215, 0));
+        testInfoLabel.setForeground(UIConstants.CHIPS_GOLD);
         testInfoLabel.setFont(new Font("SansSerif", Font.ITALIC, 12));
         formPanel.add(testInfoLabel, gbc);
 
         // Button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        buttonPanel.setBackground(new Color(30, 30, 30));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, UIConstants.SPACING_SMALL));
+        buttonPanel.setBackground(UIConstants.BACKGROUND_PANEL);
 
         RedButton purchaseButton = new RedButton("Purchase");
         RedButton cancelButton = new RedButton("Cancel");
@@ -151,8 +151,8 @@ public class PaymentDialog extends JDialog {
 
         // Info panel
         JPanel infoPanel = new JPanel();
-        infoPanel.setBackground(new Color(40, 40, 40));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        infoPanel.setBackground(UIConstants.BACKGROUND_PANEL_LIGHT);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, UIConstants.SPACING_SMALL, 5, UIConstants.SPACING_SMALL));
         JLabel infoLabel = new JLabel("<html><center>Test Cards: 4532015112830366 (Visa)<br/>5425233430109903 (Mastercard)</center></html>");
         infoLabel.setForeground(Color.LIGHT_GRAY);
         infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -168,7 +168,7 @@ public class PaymentDialog extends JDialog {
         add(formPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        getContentPane().setBackground(new Color(30, 30, 30));
+        getContentPane().setBackground(UIConstants.BACKGROUND_PANEL);
     }
 
     private void fillTestCardData() {
