@@ -11,6 +11,7 @@ public class ChipsDatabase {
     private static final String DB_FILE = "gamedata.properties";
     private static final String CHIPS_KEY = "chips";
     private static final String OWN_GREEN_TABLE_KEY = "ownGreenTable";
+    private static final String OWN_ANIMATED_BG_KEY = "ownAnimatedBackground";
     private static final String CURRENT_BACKGROUND_KEY = "currentBackground";
     private static final String VOLUME_LEVEL_KEY = "volumeLevel";
     private static final String MUSIC_ENABLED_KEY = "musicEnabled";
@@ -49,6 +50,7 @@ public class ChipsDatabase {
     private void initializeDefaults() {
         properties.setProperty(CHIPS_KEY, String.valueOf(DEFAULT_CHIPS));
         properties.setProperty(OWN_GREEN_TABLE_KEY, "false");
+        properties.setProperty(OWN_ANIMATED_BG_KEY, "false");
         properties.setProperty(CURRENT_BACKGROUND_KEY, "default");
         properties.setProperty(VOLUME_LEVEL_KEY, String.valueOf(DEFAULT_VOLUME));
         properties.setProperty(MUSIC_ENABLED_KEY, "true");
@@ -98,6 +100,22 @@ public class ChipsDatabase {
      */
     public void saveOwnGreenTable(boolean owns) {
         properties.setProperty(OWN_GREEN_TABLE_KEY, String.valueOf(owns));
+        saveDatabase();
+    }
+
+    /**
+     * Get whether player owns animated background
+     */
+    public boolean getOwnAnimatedBackground() {
+        String value = properties.getProperty(OWN_ANIMATED_BG_KEY, "false");
+        return Boolean.parseBoolean(value);
+    }
+
+    /**
+     * Save whether player owns animated background
+     */
+    public void saveOwnAnimatedBackground(boolean owns) {
+        properties.setProperty(OWN_ANIMATED_BG_KEY, String.valueOf(owns));
         saveDatabase();
     }
 

@@ -36,8 +36,9 @@ public class BlackjackGUI extends JFrame implements ActionListener {
     private int winStreak = 0;
 
     // Background settings
-    private String currentBackground = "default"; // default, green_table
+    private String currentBackground = "default"; // default, green_table, animated
     private boolean ownGreenTable = false;
+    private boolean ownAnimatedBackground = false;
 
     // Game settings
     private int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
@@ -77,6 +78,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         database = new ChipsDatabase();
         chips = database.getChips();
         ownGreenTable = database.getOwnGreenTable();
+        ownAnimatedBackground = database.getOwnAnimatedBackground();
         currentBackground = database.getCurrentBackground();
 
         // Initialize audio with saved settings
@@ -124,7 +126,15 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
     // ---------- MENU UI ----------
     private JPanel createMenuPanel() {
-        AnimatedBackgroundPanel panel = new AnimatedBackgroundPanel();
+        JPanel panel;
+
+        // Use appropriate background based on current selection
+        if (currentBackground.equals("animated")) {
+            panel = new AnimatedBackgroundPanel();
+        } else {
+            panel = new StaticBackgroundPanel("src/data/images/Third_Background.png");
+        }
+
         panel.setLayout(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
@@ -533,7 +543,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         gameSettingsPanel.add(musicPanel);
 
         // Background options panel
-        JPanel backgroundPanel = new JPanel(new GridLayout(2, 1, 20, 20));
+        JPanel backgroundPanel = new JPanel(new GridLayout(3, 1, 20, 20));
         backgroundPanel.setOpaque(false);
 
         // Green Table option
@@ -607,12 +617,12 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         greenTablePanel.add(greenTableLabel, BorderLayout.CENTER);
         greenTablePanel.add(greenButtonPanel, BorderLayout.SOUTH);
 
-        // Default background option
+        // Default background option (Third_Background.png)
         JPanel defaultPanel = new JPanel(new BorderLayout(10, 10));
         defaultPanel.setOpaque(false);
         defaultPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
 
-        JLabel defaultLabel = new JLabel("<html><center>Default Dark Background<br/>Always Available</center></html>", SwingConstants.CENTER);
+        JLabel defaultLabel = new JLabel("<html><center>Default Background<br/>Always Available</center></html>", SwingConstants.CENTER);
         defaultLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
         defaultLabel.setForeground(Color.WHITE);
         defaultLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -634,6 +644,10 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             currentBackground = "default";
             database.saveCurrentBackground("default");
             updateGameBackground();
+            // Refresh menu panel
+            cardPanel.remove(0); // Remove old menu
+            JPanel newMenu = createMenuPanel();
+            cardPanel.add(newMenu, "MENU", 0);
             showSuccess("Default background equipped!");
             // Refresh settings panel
             cardLayout.show(cardPanel, "MENU");
@@ -643,7 +657,85 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         defaultPanel.add(defaultLabel, BorderLayout.CENTER);
         defaultPanel.add(defaultButtonPanel, BorderLayout.SOUTH);
 
+        // Animated background option
+        JPanel animatedPanel = new JPanel(new BorderLayout(10, 10));
+        animatedPanel.setOpaque(false);
+        animatedPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+        animatedPanel.setBackground(new Color(30, 30, 30, 150));
+
+        JLabel animatedLabel = new JLabel("<html><center>Animated Menu Background<br/>Cost: $200</center></html>", SwingConstants.CENTER);
+        animatedLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
+        animatedLabel.setForeground(Color.WHITE);
+        animatedLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        RedButton purchaseAnimatedButton = new RedButton("Purchase");
+        RedButton equipAnimatedButton = new RedButton("Equip");
+        RedButton unequipAnimatedButton = new RedButton("Unequip");
+
+        JPanel animatedButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        animatedButtonPanel.setOpaque(false);
+
+        // Initially show purchase button if not owned
+        if (!ownAnimatedBackground) {
+            animatedButtonPanel.add(purchaseAnimatedButton);
+        } else {
+            if (currentBackground.equals("animated")) {
+                animatedButtonPanel.add(unequipAnimatedButton);
+            } else {
+                animatedButtonPanel.add(equipAnimatedButton);
+            }
+        }
+
+        purchaseAnimatedButton.addActionListener(e -> {
+            if (chips >= 200 && !ownAnimatedBackground) {
+                chips -= 200;
+                ownAnimatedBackground = true;
+                database.saveOwnAnimatedBackground(true);
+                settingsChipsLabel.setText("Your Chips: $" + chips);
+                updateStatsDisplay(); // Update game UI immediately
+                animatedButtonPanel.removeAll();
+                animatedButtonPanel.add(equipAnimatedButton);
+                animatedButtonPanel.revalidate();
+                animatedButtonPanel.repaint();
+                showSuccess("Animated Menu Background purchased!");
+            } else if (chips < 200) {
+                showWarning("Not enough chips! You need $200.");
+            }
+        });
+
+        equipAnimatedButton.addActionListener(e -> {
+            currentBackground = "animated";
+            database.saveCurrentBackground("animated");
+            // Refresh menu panel
+            cardPanel.remove(0); // Remove old menu
+            JPanel newMenu = createMenuPanel();
+            cardPanel.add(newMenu, "MENU", 0);
+            animatedButtonPanel.removeAll();
+            animatedButtonPanel.add(unequipAnimatedButton);
+            animatedButtonPanel.revalidate();
+            animatedButtonPanel.repaint();
+            showSuccess("Animated Menu Background equipped!");
+        });
+
+        unequipAnimatedButton.addActionListener(e -> {
+            currentBackground = "default";
+            database.saveCurrentBackground("default");
+            // Refresh menu panel
+            cardPanel.remove(0); // Remove old menu
+            JPanel newMenu = createMenuPanel();
+            cardPanel.add(newMenu, "MENU", 0);
+            animatedButtonPanel.removeAll();
+            animatedButtonPanel.add(equipAnimatedButton);
+            animatedButtonPanel.revalidate();
+            animatedButtonPanel.repaint();
+            showSuccess("Background reset to default.");
+        });
+
+        animatedPanel.add(animatedLabel, BorderLayout.CENTER);
+        animatedPanel.add(animatedButtonPanel, BorderLayout.SOUTH);
+
         backgroundPanel.add(defaultPanel);
+        backgroundPanel.add(animatedPanel);
         backgroundPanel.add(greenTablePanel);
 
         // Add all sections to main options panel
