@@ -137,13 +137,13 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         JLabel logoLabel = new JLabel("", SwingConstants.CENTER);
         try {
             // Try to load from classpath first
-            java.net.URL logoUrl = getClass().getResource("/data/logo.png");
+            java.net.URL logoUrl = getClass().getResource("/data/images/logo.png");
             if (logoUrl != null) {
                 ImageIcon logoIcon = new ImageIcon(logoUrl);
                 logoLabel.setIcon(logoIcon);
             } else {
                 // Fallback to file path
-                ImageIcon logoIcon = new ImageIcon("src/data/logo.png");
+                ImageIcon logoIcon = new ImageIcon("src/data/images/logo.png");
                 if (logoIcon.getIconWidth() == -1) {
                     // If still not found, set placeholder text
                     logoLabel.setText("BLACKDUCK");
@@ -1132,7 +1132,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
     // ---------- Sound helper ----------
     public static void playClickSound() {
-        AudioManager.getInstance().playSoundEffect("click.wav");
+        AudioManager.getInstance().playSoundEffect("src/data/audio/click.wav");
     }
 
     public static void main(String[] args) {

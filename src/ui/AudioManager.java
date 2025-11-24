@@ -118,28 +118,28 @@ public class AudioManager {
      * Play bet sound effect
      */
     public void playBetSound() {
-        playSoundEffect("bet.wav");
+        playSoundEffect("src/data/audio/bet.wav");
     }
 
     /**
      * Play win sound effect
      */
     public void playWinSound() {
-        playSoundEffect("win.wav");
+        playSoundEffect("src/data/audio/win.wav");
     }
 
     /**
      * Play lose sound effect
      */
     public void playLoseSound() {
-        playSoundEffect("lose.wav");
+        playSoundEffect("src/data/audio/lose.wav");
     }
 
     /**
      * Play push (tie) sound effect
      */
     public void playPushSound() {
-        playSoundEffect("push.wav");
+        playSoundEffect("src/data/audio/push.wav");
     }
 
     /**
@@ -156,7 +156,7 @@ public class AudioManager {
 
         new Thread(() -> {
             try {
-                File musicFile = new File("background_music.wav");
+                File musicFile = new File("src/data/audio/background_music.wav");
                 if (!musicFile.exists()) {
                     System.err.println("Background music file not found: " + musicFile.getAbsolutePath());
                     return; // File not found, silently fail

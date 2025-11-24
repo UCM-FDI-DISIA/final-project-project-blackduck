@@ -1,5 +1,5 @@
 
-![Logo](logo.png)
+![Logo](src/data/images/logo.png)
 
 # BlackDuck - Blackjack Game
 
@@ -78,13 +78,13 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Background Music** - Looping background music (toggle on/off)
 - **Volume Control** - Four levels: Off, Low, Medium, High
 - **Persistent Settings** - Audio preferences saved between sessions
-- **Audio Files Needed** (place in project root):
+- **Audio Files** (located in `src/data/audio/`):
   - `click.wav` - Button click sound effect
   - `bet.wav` - Bet placement sound effect
   - `win.wav` - Win celebration sound effect
   - `lose.wav` - Loss sound effect
-  - `push.wav` - Push/tie sound effect (optional)
-  - `background_music.wav` - Background music loop (optional)
+  - `push.wav` - Push/tie sound effect
+  - `background_music.wav` - Background music loop
 
 ### ⌨️ Keyboard Shortcuts
 - **ESC** - Exit the application
@@ -122,7 +122,20 @@ src/
 │   ├── Card.java          - Card data model
 │   ├── Rank.java          - Card rank enum with values
 │   ├── Suit.java          - Card suit enum
-│   └── ChipsDatabase.java - Persistent storage handler
+│   ├── ChipsDatabase.java - Persistent storage handler
+│   ├── audio/             - Audio files folder
+│   │   ├── click.wav      - Button click sound
+│   │   ├── bet.wav        - Bet placement sound
+│   │   ├── win.wav        - Win celebration sound
+│   │   ├── lose.wav       - Loss sound
+│   │   ├── push.wav       - Push/tie sound
+│   │   └── background_music.wav - Background music
+│   └── images/            - Image files folder
+│       ├── logo.png       - Game logo
+│       ├── PNG-cards-1.3/ - Playing card images
+│       ├── First_Background.png
+│       ├── Second_Background.webp
+│       └── Third_Background.png
 ├── logic/
 │   ├── Deck.java          - Deck management and shuffling
 │   └── Hand.java          - Hand calculation and blackjack logic

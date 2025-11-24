@@ -15,10 +15,10 @@ public class CardImages {
 
     // Base paths to try for card images
     private static final String[] BASE_PATHS = {
-        "src/data/PNG-cards-1.3/",
-        "data/PNG-cards-1.3/",
-        "../src/data/PNG-cards-1.3/",
-        "./src/data/PNG-cards-1.3/"
+        "src/data/images/PNG-cards-1.3/",
+        "data/images/PNG-cards-1.3/",
+        "../src/data/images/PNG-cards-1.3/",
+        "./src/data/images/PNG-cards-1.3/"
     };
 
     public static ImageIcon getIcon(Card card) {
