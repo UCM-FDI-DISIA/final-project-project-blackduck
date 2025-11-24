@@ -1,6 +1,7 @@
 package ui;
 
 import data.Card;
+import data.ChipsDatabase;
 import logic.Deck;
 import logic.Hand;
 
@@ -27,6 +28,9 @@ public class BlackjackGUI extends JFrame implements ActionListener {
     private Deck deck;
     private Hand playerHand;
     private Hand dealerHand;
+
+    // Database
+    private final ChipsDatabase database;
 
     // Betting and stats
     private int chips = 100;
@@ -71,6 +75,12 @@ public class BlackjackGUI extends JFrame implements ActionListener {
     public BlackjackGUI() {
         super("Blackjack");
 
+        // Initialize database and load saved data
+        database = new ChipsDatabase();
+        chips = database.getChips();
+        ownGreenTable = database.getOwnGreenTable();
+        currentBackground = database.getCurrentBackground();
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Fullscreen dark window
@@ -98,6 +108,9 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         setContentPane(cardPanel);
         cardLayout.show(cardPanel, "MENU");
+
+        // Apply saved background
+        updateGameBackground();
 
         setVisible(true);
     }
@@ -474,6 +487,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             if (chips >= 150 && !ownGreenTable) {
                 chips -= 150;
                 ownGreenTable = true;
+                database.saveOwnGreenTable(true);
                 settingsChipsLabel.setText("Your Chips: $" + chips);
                 updateStatsDisplay(); // Update game UI immediately
                 greenButtonPanel.removeAll();
@@ -488,6 +502,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         equipGreenButton.addActionListener(e -> {
             currentBackground = "green_table";
+            database.saveCurrentBackground("green_table");
             updateGameBackground();
             greenButtonPanel.removeAll();
             greenButtonPanel.add(unequipGreenButton);
@@ -498,6 +513,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         unequipGreenButton.addActionListener(e -> {
             currentBackground = "default";
+            database.saveCurrentBackground("default");
             updateGameBackground();
             greenButtonPanel.removeAll();
             greenButtonPanel.add(equipGreenButton);
@@ -534,6 +550,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
         equipDefaultButton.addActionListener(e -> {
             currentBackground = "default";
+            database.saveCurrentBackground("default");
             updateGameBackground();
             JOptionPane.showMessageDialog(this, "Default background equipped!", "Equipped", JOptionPane.INFORMATION_MESSAGE);
             // Refresh settings panel
@@ -657,6 +674,8 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         chipsLabel.setText("Chips: $" + chips);
         betLabel.setText("Current Bet: $" + currentBet);
         winStreakLabel.setText("Win Streak: " + winStreak);
+        // Save chips to database whenever stats update
+        database.saveChips(chips);
     }
 
     private void dealInitialCards() {
