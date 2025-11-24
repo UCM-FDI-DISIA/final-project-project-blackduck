@@ -7,7 +7,6 @@ import logic.Hand;
 import static ui.UIConstants.*;
 
 import javax.swing.*;
-import javax.sound.sampled.*;
 
 import static java.lang.Thread.sleep;
 
@@ -15,8 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class BlackjackGUI extends JFrame implements ActionListener {
@@ -81,6 +78,15 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         chips = database.getChips();
         ownGreenTable = database.getOwnGreenTable();
         currentBackground = database.getCurrentBackground();
+
+        // Initialize audio with saved settings
+        AudioManager audio = AudioManager.getInstance();
+        audio.setVolumeLevel(database.getVolumeLevel());
+
+        // Set music enabled AFTER volume is set, so it can start properly
+        if (database.isMusicEnabled()) {
+            audio.setMusicEnabled(true);
+        }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -377,7 +383,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         optionsPanel.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
 
         // Game Settings Section
-        JPanel gameSettingsPanel = new JPanel(new GridLayout(2, 1, 20, 20));
+        JPanel gameSettingsPanel = new JPanel(new GridLayout(4, 1, 20, 20));
         gameSettingsPanel.setOpaque(false);
         gameSettingsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 
@@ -449,8 +455,82 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         luckPanel.add(luckContentPanel, BorderLayout.CENTER);
         luckPanel.add(luckComboPanel, BorderLayout.SOUTH);
 
+        // Volume Setting
+        JPanel volumePanel = new JPanel(new BorderLayout(10, 10));
+        volumePanel.setOpaque(false);
+        volumePanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+
+        JLabel volumeTitleLabel = new JLabel("Sound Volume", SwingConstants.CENTER);
+        volumeTitleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
+        volumeTitleLabel.setForeground(Color.WHITE);
+        volumeTitleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+
+        JLabel volumeDescLabel = new JLabel("<html><center>Control sound effects volume</center></html>", SwingConstants.CENTER);
+        volumeDescLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        volumeDescLabel.setForeground(Color.LIGHT_GRAY);
+
+        String[] volumeLevels = {"Off", "Low", "Medium", "High"};
+        JComboBox<String> volumeCombo = new JComboBox<>(volumeLevels);
+        volumeCombo.setSelectedIndex(database.getVolumeLevel());
+        volumeCombo.setFont(new Font("SansSerif", Font.BOLD, 16));
+        volumeCombo.addActionListener(e -> {
+            int level = volumeCombo.getSelectedIndex();
+            AudioManager.getInstance().setVolumeLevel(level);
+            database.saveVolumeLevel(level);
+        });
+
+        JPanel volumeContentPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        volumeContentPanel.setOpaque(false);
+        volumeContentPanel.add(volumeTitleLabel);
+        volumeContentPanel.add(volumeDescLabel);
+
+        JPanel volumeComboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        volumeComboPanel.setOpaque(false);
+        volumeComboPanel.add(volumeCombo);
+
+        volumePanel.add(volumeContentPanel, BorderLayout.CENTER);
+        volumePanel.add(volumeComboPanel, BorderLayout.SOUTH);
+
+        // Background Music Setting
+        JPanel musicPanel = new JPanel(new BorderLayout(10, 10));
+        musicPanel.setOpaque(false);
+        musicPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+
+        JLabel musicTitleLabel = new JLabel("Background Music", SwingConstants.CENTER);
+        musicTitleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_MEDIUM));
+        musicTitleLabel.setForeground(Color.WHITE);
+        musicTitleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+
+        JLabel musicDescLabel = new JLabel("<html><center>Toggle background music on/off</center></html>", SwingConstants.CENTER);
+        musicDescLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        musicDescLabel.setForeground(Color.LIGHT_GRAY);
+
+        String[] musicOptions = {"Off", "On"};
+        JComboBox<String> musicCombo = new JComboBox<>(musicOptions);
+        musicCombo.setSelectedIndex(database.isMusicEnabled() ? 1 : 0);
+        musicCombo.setFont(new Font("SansSerif", Font.BOLD, 16));
+        musicCombo.addActionListener(e -> {
+            boolean enabled = musicCombo.getSelectedIndex() == 1;
+            AudioManager.getInstance().setMusicEnabled(enabled);
+            database.saveMusicEnabled(enabled);
+        });
+
+        JPanel musicContentPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        musicContentPanel.setOpaque(false);
+        musicContentPanel.add(musicTitleLabel);
+        musicContentPanel.add(musicDescLabel);
+
+        JPanel musicComboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        musicComboPanel.setOpaque(false);
+        musicComboPanel.add(musicCombo);
+
+        musicPanel.add(musicContentPanel, BorderLayout.CENTER);
+        musicPanel.add(musicComboPanel, BorderLayout.SOUTH);
+
         gameSettingsPanel.add(difficultyPanel);
         gameSettingsPanel.add(luckPanel);
+        gameSettingsPanel.add(volumePanel);
+        gameSettingsPanel.add(musicPanel);
 
         // Background options panel
         JPanel backgroundPanel = new JPanel(new GridLayout(2, 1, 20, 20));
@@ -665,6 +745,9 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             currentBet += amount;
             chips -= amount;
             updateStatsDisplay();
+
+            // Play bet sound
+            AudioManager.getInstance().playBetSound();
 
             if (currentBet > 0) {
                 dealButton.setEnabled(true);
@@ -948,6 +1031,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         if (playerWon == null) {
             // Push - return bet
             chips += currentBet;
+            AudioManager.getInstance().playPushSound(); // Play push sound
             // Luck bonus: On Lucky or Very Lucky, sometimes win on a push
             if (luckLevel >= 2) {
                 double pushWinChance = (luckLevel == 2) ? 0.15 : 0.25; // 15% for Lucky, 25% for Very Lucky
@@ -958,6 +1042,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             }
         } else if (playerWon) {
             // Player wins
+            AudioManager.getInstance().playWinSound(); // Play win sound
             double luckMultiplier = 1.0;
             if (luckLevel == 2) {
                 luckMultiplier = 1.1; // 10% bonus on Lucky
@@ -973,6 +1058,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             winStreak++;
         } else {
             // Player loses
+            AudioManager.getInstance().playLoseSound(); // Play lose sound
             // Luck can sometimes save you from a loss
             if (luckLevel == 3 && Math.random() < 0.1) { // 10% chance on Very Lucky
                 chips += currentBet; // Get bet back
@@ -1046,17 +1132,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
     // ---------- Sound helper ----------
     public static void playClickSound() {
-        new Thread(() -> {
-            try {
-                File f = new File("click.wav");
-                if (!f.exists()) return;
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(f);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ignored) {
-            }
-        }).start();
+        AudioManager.getInstance().playSoundEffect("click.wav");
     }
 
     public static void main(String[] args) {

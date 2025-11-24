@@ -12,7 +12,10 @@ public class ChipsDatabase {
     private static final String CHIPS_KEY = "chips";
     private static final String OWN_GREEN_TABLE_KEY = "ownGreenTable";
     private static final String CURRENT_BACKGROUND_KEY = "currentBackground";
+    private static final String VOLUME_LEVEL_KEY = "volumeLevel";
+    private static final String MUSIC_ENABLED_KEY = "musicEnabled";
     private static final int DEFAULT_CHIPS = 100;
+    private static final int DEFAULT_VOLUME = 2; // 0=Off, 1=Low, 2=Medium, 3=High
 
     private Properties properties;
 
@@ -47,6 +50,8 @@ public class ChipsDatabase {
         properties.setProperty(CHIPS_KEY, String.valueOf(DEFAULT_CHIPS));
         properties.setProperty(OWN_GREEN_TABLE_KEY, "false");
         properties.setProperty(CURRENT_BACKGROUND_KEY, "default");
+        properties.setProperty(VOLUME_LEVEL_KEY, String.valueOf(DEFAULT_VOLUME));
+        properties.setProperty(MUSIC_ENABLED_KEY, "true");
     }
 
     /**
@@ -108,6 +113,42 @@ public class ChipsDatabase {
      */
     public void saveCurrentBackground(String background) {
         properties.setProperty(CURRENT_BACKGROUND_KEY, background);
+        saveDatabase();
+    }
+
+    /**
+     * Get volume level (0=Off, 1=Low, 2=Medium, 3=High)
+     */
+    public int getVolumeLevel() {
+        String value = properties.getProperty(VOLUME_LEVEL_KEY, String.valueOf(DEFAULT_VOLUME));
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return DEFAULT_VOLUME;
+        }
+    }
+
+    /**
+     * Save volume level
+     */
+    public void saveVolumeLevel(int level) {
+        properties.setProperty(VOLUME_LEVEL_KEY, String.valueOf(level));
+        saveDatabase();
+    }
+
+    /**
+     * Get whether background music is enabled
+     */
+    public boolean isMusicEnabled() {
+        String value = properties.getProperty(MUSIC_ENABLED_KEY, "true");
+        return Boolean.parseBoolean(value);
+    }
+
+    /**
+     * Save whether background music is enabled
+     */
+    public void saveMusicEnabled(boolean enabled) {
+        properties.setProperty(MUSIC_ENABLED_KEY, String.valueOf(enabled));
         saveDatabase();
     }
 

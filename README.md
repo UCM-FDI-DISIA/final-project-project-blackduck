@@ -39,12 +39,18 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
   - Lucky: 10% bonus on wins, 15% chance to win on push
   - Very Lucky: 25% bonus on wins, 25% chance to win on push, 10% chance to recover losses
 
+- **Audio Settings**
+  - Sound Volume: Off / Low / Medium / High
+  - Background Music: On / Off
+
 ### 💾 Data Persistence
 - **Automatic Save System** - Chips, purchases, and settings are saved automatically
 - **Database Storage** - Uses properties file (`gamedata.properties`) to store:
   - Current chip balance
   - Owned backgrounds/themes
   - Selected background
+  - Volume level
+  - Music on/off preference
 
 ### 🎯 User Interface
 - **Intuitive Controls**
@@ -62,8 +68,23 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
   - Settings panel with scrollable options
   - In-game menu button for quick navigation
 
-### 🔊 Audio (Optional)
-- Click sound effects for button interactions
+### 🔊 Audio System
+- **Sound Effects** - Button clicks and game events with adjustable volume
+  - Button click sounds
+  - Bet placement sound
+  - Win celebration sound
+  - Loss sound
+  - Push/tie sound
+- **Background Music** - Looping background music (toggle on/off)
+- **Volume Control** - Four levels: Off, Low, Medium, High
+- **Persistent Settings** - Audio preferences saved between sessions
+- **Audio Files Needed** (place in project root):
+  - `click.wav` - Button click sound effect
+  - `bet.wav` - Bet placement sound effect
+  - `win.wav` - Win celebration sound effect
+  - `lose.wav` - Loss sound effect
+  - `push.wav` - Push/tie sound effect (optional)
+  - `background_music.wav` - Background music loop (optional)
 
 ### ⌨️ Keyboard Shortcuts
 - **ESC** - Exit the application
@@ -111,6 +132,7 @@ src/
     ├── AnimatedBackgroundPanel.java - Animated menu background
     ├── CardImages.java             - Card image loading and caching
     ├── PaymentDialog.java          - Virtual chip purchase interface
+    ├── AudioManager.java           - Audio playback and volume control
     ├── UIConstants.java            - Centralized UI constants
     └── GraphicsUtil.java           - Graphics utility methods
 ```
