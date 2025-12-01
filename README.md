@@ -13,6 +13,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Double Down** - Double your bet and take exactly one more card
 - **Win Streaks** - Track your consecutive wins
 - **Smart Dealer AI** - Dealer behavior adapts to difficulty settings
+- **🌐 LAN Multiplayer** - Play dealer vs player over local network
 
 ### 💰 Virtual Economy
 - **Persistent Chip Balance** - Your chips are automatically saved and restored between sessions
@@ -89,7 +90,16 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 ### ⌨️ Keyboard Shortcuts
 - **ESC** - Exit the application
 
+### 🌐 Multiplayer Mode (NEW!)
+- **Host Game (Dealer)** - Start a server and act as the dealer for another player
+- **Join Game (Player)** - Connect to a dealer's server and play as a remote player
+- **LAN Support** - Play over local network (requires same network or direct IP connection)
+- **Real-time Gameplay** - All actions synchronized between dealer and player
+- **Server Info Display** - Dealer can see their IP address for easy connection sharing
+
 ## How to Play
+
+### Single Player Mode
 
 1. **Start the Game** - Click "Start Game" from the main menu
 2. **Place Your Bet** - Use the betting buttons ($5, $10, $25, $50) to place your bet
@@ -100,6 +110,24 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
    - **Double Down** - Double your bet and take one final card (available only with 2 cards)
 5. **Win or Lose** - Beat the dealer without going over 21
 6. **Repeat** - Place a new bet and play another round
+
+### Multiplayer Mode
+
+#### As Dealer (Host):
+1. **Click "Multiplayer"** from the main menu
+2. **Select "Host Game"** - Server starts automatically on port 7777
+3. **Share Your IP** - Your IP address is displayed on screen
+4. **Wait for Player** - Game begins when a player connects
+5. **Monitor Game** - Watch the player's actions and dealer responses in real-time
+6. **View Logs** - Server activity logged in the bottom panel
+
+#### As Player (Client):
+1. **Click "Multiplayer"** from the main menu
+2. **Select "Join Game"** and enter the dealer's IP address
+3. **Connect** - Wait for connection confirmation
+4. **Place Bets** - Use betting buttons like in single-player mode
+5. **Play Cards** - Hit, Stand, or Double Down as usual
+6. **Results** - Chips automatically updated based on game outcome
 
 ## Winning Conditions
 
@@ -119,7 +147,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 ```
 src/
 ├── data/
-│   ├── Card.java          - Card data model
+│   ├── Card.java          - Card data model (Serializable)
 │   ├── Rank.java          - Card rank enum with values
 │   ├── Suit.java          - Card suit enum
 │   ├── ChipsDatabase.java - Persistent storage handler
@@ -139,8 +167,15 @@ src/
 ├── logic/
 │   ├── Deck.java          - Deck management and shuffling
 │   └── Hand.java          - Hand calculation and blackjack logic
+├── network/
+│   ├── GameMessage.java   - Network message protocol (Serializable)
+│   ├── GameServer.java    - Server (dealer) networking logic
+│   └── GameClient.java    - Client (player) networking logic
 └── ui/
     ├── BlackjackGUI.java           - Main game interface
+    ├── MultiplayerDialog.java      - Multiplayer mode selection
+    ├── MultiplayerServerGUI.java   - Dealer server interface
+    ├── MultiplayerClientGUI.java   - Player client interface
     ├── RedButton.java              - Custom styled button
     ├── AnimatedBackgroundPanel.java - Animated menu background
     ├── CardImages.java             - Card image loading and caching
@@ -158,6 +193,14 @@ src/
 - **Enum-Based Design** - Card ranks and suits use enums with display methods
 - **Helper Methods** - Dialog helpers and graphics utilities reduce boilerplate
 
+### Multiplayer Networking
+- **TCP Sockets** - Reliable connection between dealer and player
+- **Object Serialization** - Game state transmitted as serializable objects
+- **Message Protocol** - Comprehensive GameMessage class handles all game events
+- **Threaded I/O** - Non-blocking network communication
+- **Real-time Sync** - Card deals, bets, and results synchronized instantly
+- **Default Port** - Uses port 7777 (configurable)
+
 ### Performance Optimizations
 - **Image Caching** - Card images are cached to prevent redundant loading
 - **Efficient Rendering** - Graphics2D with antialiasing for smooth visuals
@@ -172,11 +215,17 @@ src/
 
 ### From Source
 ```bash
-# Compile
-javac -d bin src/data/*.java src/logic/*.java src/ui/*.java
+# Compile all files
+javac -d bin src/**/*.java
 
-# Run
+# Run single player game
 java -cp bin ui.BlackjackGUI
+
+# Run multiplayer server (dealer)
+java -cp bin ui.MultiplayerServerGUI
+
+# Run multiplayer client (player) - replace <server-ip> with dealer's IP
+java -cp bin ui.MultiplayerClientGUI <server-ip>
 ```
 
 ### From IDE
