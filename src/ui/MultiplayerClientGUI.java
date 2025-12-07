@@ -17,26 +17,26 @@ import static ui.UIConstants.*;
 public class MultiplayerClientGUI extends JFrame implements GameClient.ClientListener {
 
     private GameClient client;
-    private String serverIP;
+    private final String serverIP;
 
-    private JLabel statusLabel;
-    private JLabel connectionLabel;
-    private JLabel chipsLabel;
-    private JLabel betLabel;
-    private JPanel playerCardsPanel;
-    private JPanel dealerCardsPanel;
-    private JLabel playerValueLabel;
-    private JLabel dealerValueLabel;
+    private final JLabel statusLabel;
+    private final JLabel connectionLabel;
+    private final JLabel chipsLabel;
+    private final JLabel betLabel;
+    private final JPanel playerCardsPanel;
+    private final JPanel dealerCardsPanel;
+    private final JLabel playerValueLabel;
+    private final JLabel dealerValueLabel;
 
-    private RedButton hitButton;
-    private RedButton standButton;
-    private RedButton doubleButton;
-    private RedButton dealButton;
-    private RedButton bet5Button;
-    private RedButton bet10Button;
-    private RedButton bet25Button;
-    private RedButton bet50Button;
-    private RedButton clearBetButton;
+    private final RedButton hitButton;
+    private final RedButton standButton;
+    private final RedButton doubleButton;
+    private final RedButton dealButton;
+    private final RedButton bet5Button;
+    private final RedButton bet10Button;
+    private final RedButton bet25Button;
+    private final RedButton bet50Button;
+    private final RedButton clearBetButton;
 
     private int chips = 100;
     private int currentBet = 0;
@@ -349,11 +349,9 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
 
     private void handleMessage(GameMessage message) {
         switch (message.getType()) {
-            case CONNECT_ACCEPT:
-                statusLabel.setText(message.getData());
-                break;
+            case CONNECT_ACCEPT -> statusLabel.setText(message.getData());
 
-            case TURN_CHANGED:
+            case TURN_CHANGED -> {
                 // Turn changed - show waiting message
                 statusLabel.setText(message.getStatusMessage());
                 if (message.isDealerTurn()) {
@@ -362,9 +360,9 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
                     standButton.setEnabled(false);
                     doubleButton.setEnabled(false);
                 }
-                break;
+            }
 
-            case DEALER_CARD_DEALT:
+            case DEALER_CARD_DEALT -> {
                 // Dealer drew a card
                 if (message.getSingleCard() != null) {
                     addDealerCard(message.getSingleCard());
@@ -374,9 +372,9 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
                     dealerValueLabel.setText("Value: " + message.getDealerValue());
                 }
                 statusLabel.setText(message.getStatusMessage());
-                break;
+            }
 
-            case UPDATE_GAME_STATE:
+            case UPDATE_GAME_STATE -> {
                 // Initial cards dealt
                 updatePlayerCards(message.getCards());
                 playerValueLabel.setText("Value: " + message.getPlayerValue());
@@ -399,9 +397,9 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
                 } else {
                     statusLabel.setText("Waiting for dealer...");
                 }
-                break;
+            }
 
-            case CARD_DEALT:
+            case CARD_DEALT -> {
                 // Player received a card
                 if (message.getSingleCard() != null) {
                     addPlayerCard(message.getSingleCard());
@@ -423,9 +421,9 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
                 } else {
                     doubleButton.setEnabled(false);
                 }
-                break;
+            }
 
-            case ROUND_END:
+            case ROUND_END -> {
                 // Show all dealer cards
                 if (message.getDealerCards() != null && !message.getDealerCards().isEmpty()) {
                     updateDealerCards(message.getDealerCards());
@@ -447,13 +445,13 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
                 }
 
                 endRound(message);
-                break;
+            }
 
-            default:
-                // Handle other message types that don't need client action
-                break;
+            default -> {
+            }
         }
-    }
+        // Handle other message types that don't need client action
+            }
 
     private void updatePlayerCards(List<Card> cards) {
         playerCardsPanel.removeAll();
@@ -493,7 +491,7 @@ public class MultiplayerClientGUI extends JFrame implements GameClient.ClientLis
         dealerCardsPanel.repaint();
     }
 
-    private void endRound(GameMessage message) {
+    private void endRound(@SuppressWarnings("unused") GameMessage message) {
         roundStarted = false;
         currentBet = 0;
 

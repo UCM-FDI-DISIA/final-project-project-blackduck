@@ -14,28 +14,19 @@ public class GameMessage implements Serializable {
         // Connection messages
         CONNECT_REQUEST,
         CONNECT_ACCEPT,
-        CONNECT_REJECT,
         DISCONNECT,
 
         // Game flow messages
         PLACE_BET,
         DEAL_CARDS,
-        START_GAME,
         PLAYER_ACTION,
-        DEALER_ACTION,
-        DEALER_TURN,
         ROUND_END,
 
         // State updates
         UPDATE_GAME_STATE,
         CARD_DEALT,
         DEALER_CARD_DEALT,
-        TURN_CHANGED,
-
-        // Player actions
-        HIT,
-        STAND,
-        DOUBLE_DOWN
+        TURN_CHANGED
     }
 
     public enum PlayerAction {
@@ -55,7 +46,6 @@ public class GameMessage implements Serializable {
     private boolean dealerBust;
     private boolean roundOver;
     private String statusMessage;
-    private int playerChips;
     private PlayerAction action;
     private boolean isPlayerTurn;
     private boolean isDealerTurn;
@@ -151,14 +141,6 @@ public class GameMessage implements Serializable {
 
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
-    }
-
-    public int getPlayerChips() {
-        return playerChips;
-    }
-
-    public void setPlayerChips(int playerChips) {
-        this.playerChips = playerChips;
     }
 
     public PlayerAction getAction() {

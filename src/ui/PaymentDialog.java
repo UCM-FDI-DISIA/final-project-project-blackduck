@@ -3,14 +3,13 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PaymentDialog extends JDialog {
 
-    private JTextField cardNumberField;
-    private JTextField cvvField;
-    private JTextField expiryField;
-    private JComboBox<String> chipPackageCombo;
+    private final JTextField cardNumberField;
+    private final JTextField cvvField;
+    private final JTextField expiryField;
+    private final JComboBox<String> chipPackageCombo;
     private boolean paymentSuccessful = false;
     private int chipsToAdd = 0;
 
@@ -123,26 +122,17 @@ public class PaymentDialog extends JDialog {
         RedButton cancelButton = new RedButton("Cancel");
         RedButton testCardButton = new RedButton("Use Test Card");
 
-        purchaseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                processPayment();
-            }
+        purchaseButton.addActionListener((ActionEvent e) -> {
+            processPayment();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                paymentSuccessful = false;
-                dispose();
-            }
+        cancelButton.addActionListener((ActionEvent e) -> {
+            paymentSuccessful = false;
+            dispose();
         });
 
-        testCardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fillTestCardData();
-            }
+        testCardButton.addActionListener((ActionEvent e) -> {
+            fillTestCardData();
         });
 
         buttonPanel.add(testCardButton);
@@ -285,7 +275,6 @@ public class PaymentDialog extends JDialog {
                     }
                 });
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }).start();
 

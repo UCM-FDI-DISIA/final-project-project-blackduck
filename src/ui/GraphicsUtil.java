@@ -1,6 +1,5 @@
 package ui;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -20,19 +19,6 @@ public class GraphicsUtil {
     }
 
     /**
-     * Draws a card border (white outline with rounded corners).
-     */
-    public static void drawCardBorder(Graphics2D g2, int width, int height, int cornerRadius) {
-        // White outer border
-        g2.setColor(Color.WHITE);
-        g2.fillRoundRect(0, 0, width - 1, height - 1, cornerRadius, cornerRadius);
-
-        // Black outline
-        g2.setColor(Color.BLACK);
-        g2.drawRoundRect(0, 0, width - 1, height - 1, cornerRadius, cornerRadius);
-    }
-
-    /**
      * Draws a card with border and inner fill color.
      */
     public static void drawCard(Graphics2D g2, int width, int height, int cornerRadius, Color fillColor) {
@@ -47,23 +33,6 @@ public class GraphicsUtil {
         // Black outline
         g2.setColor(Color.BLACK);
         g2.drawRoundRect(0, 0, width - 1, height - 1, cornerRadius, cornerRadius);
-    }
-
-    /**
-     * Creates a transparent panel with centered flow layout.
-     */
-    public static JPanel createTransparentPanel(int hgap, int vgap) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, hgap, vgap));
-        panel.setOpaque(false);
-        return panel;
-    }
-
-    /**
-     * Creates a bordered panel with gray border.
-     */
-    public static void applyStandardBorder(JComponent component) {
-        component.setBorder(BorderFactory.createLineBorder(UIConstants.BORDER_GRAY,
-                                                          UIConstants.BORDER_THICKNESS));
     }
 
     private GraphicsUtil() {

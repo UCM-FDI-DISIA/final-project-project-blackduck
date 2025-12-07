@@ -6,6 +6,7 @@ import network.GameServer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.List;
 
 import static ui.UIConstants.*;
@@ -16,23 +17,21 @@ import static ui.UIConstants.*;
 public class MultiplayerServerGUI extends JFrame implements GameServer.ServerListener {
 
     private GameServer server;
-    private JLabel statusLabel;
-    private JLabel serverInfoLabel;
-    private JTextArea logArea;
-    private JPanel dealerCardsPanel;
-    private JPanel playerCardsPanel;
-    private JLabel dealerValueLabel;
-    private JLabel playerValueLabel;
-    private JLabel betLabel;
+    private final JLabel statusLabel;
+    private final JLabel serverInfoLabel;
+    private final JTextArea logArea;
+    private final JPanel dealerCardsPanel;
+    private final JPanel playerCardsPanel;
+    private final JLabel dealerValueLabel;
+    private final JLabel playerValueLabel;
+    private final JLabel betLabel;
 
-    private RedButton stopServerButton;
+    private final RedButton stopServerButton;
     private RedButton startGameButton;
     private RedButton dealerHitButton;
     private RedButton dealerStandButton;
 
     private boolean isPlayerConnected = false;
-    private boolean isDealerTurn = false;
-
     public MultiplayerServerGUI() {
         super("Blackjack - Dealer Server");
 
@@ -222,7 +221,7 @@ public class MultiplayerServerGUI extends JFrame implements GameServer.ServerLis
         server = new GameServer(this);
         try {
             server.start();
-        } catch (Exception e) {
+        } catch (IOException e) {
             onError("Failed to start server: " + e.getMessage());
         }
     }
@@ -332,7 +331,6 @@ public class MultiplayerServerGUI extends JFrame implements GameServer.ServerLis
     @Override
     public void onTurnChanged(boolean isDealerTurn) {
         SwingUtilities.invokeLater(() -> {
-            this.isDealerTurn = isDealerTurn;
             if (isDealerTurn) {
                 dealerHitButton.setEnabled(true);
                 dealerStandButton.setEnabled(true);
@@ -356,24 +354,28 @@ public class MultiplayerServerGUI extends JFrame implements GameServer.ServerLis
         int value = 0;
         Component[] components = dealerCardsPanel.getComponents();
         for (Component comp : components) {
-            if (comp instanceof JLabel) {
-                String tooltip = ((JLabel) comp).getToolTipText();
+            if (comp instanceof JLabel jLabel) {
+                String tooltip = jLabel.getToolTipText();
                 if (tooltip != null && !tooltip.isEmpty()) {
                     // Simple value calculation (doesn't handle Aces properly, but close enough for display)
                     String[] parts = tooltip.split(" ");
                     if (parts.length > 0) {
                         String rank = parts[0];
-                        if (rank.equals("ACE")) value += 11;
-                        else if (rank.equals("KING") || rank.equals("QUEEN") || rank.equals("JACK")) value += 10;
-                        else if (rank.equals("TEN")) value += 10;
-                        else if (rank.equals("NINE")) value += 9;
-                        else if (rank.equals("EIGHT")) value += 8;
-                        else if (rank.equals("SEVEN")) value += 7;
-                        else if (rank.equals("SIX")) value += 6;
-                        else if (rank.equals("FIVE")) value += 5;
-                        else if (rank.equals("FOUR")) value += 4;
-                        else if (rank.equals("THREE")) value += 3;
-                        else if (rank.equals("TWO")) value += 2;
+                        switch (rank) {
+                            case "ACE" -> value += 11;
+                            case "KING", "QUEEN", "JACK" -> value += 10;
+                            case "TEN" -> value += 10;
+                            case "NINE" -> value += 9;
+                            case "EIGHT" -> value += 8;
+                            case "SEVEN" -> value += 7;
+                            case "SIX" -> value += 6;
+                            case "FIVE" -> value += 5;
+                            case "FOUR" -> value += 4;
+                            case "THREE" -> value += 3;
+                            case "TWO" -> value += 2;
+                            default -> {
+                            }
+                        }
                     }
                 }
             }
@@ -385,23 +387,27 @@ public class MultiplayerServerGUI extends JFrame implements GameServer.ServerLis
         int value = 0;
         Component[] components = playerCardsPanel.getComponents();
         for (Component comp : components) {
-            if (comp instanceof JLabel) {
-                String tooltip = ((JLabel) comp).getToolTipText();
+            if (comp instanceof JLabel jLabel) {
+                String tooltip = jLabel.getToolTipText();
                 if (tooltip != null && !tooltip.isEmpty()) {
                     String[] parts = tooltip.split(" ");
                     if (parts.length > 0) {
                         String rank = parts[0];
-                        if (rank.equals("ACE")) value += 11;
-                        else if (rank.equals("KING") || rank.equals("QUEEN") || rank.equals("JACK")) value += 10;
-                        else if (rank.equals("TEN")) value += 10;
-                        else if (rank.equals("NINE")) value += 9;
-                        else if (rank.equals("EIGHT")) value += 8;
-                        else if (rank.equals("SEVEN")) value += 7;
-                        else if (rank.equals("SIX")) value += 6;
-                        else if (rank.equals("FIVE")) value += 5;
-                        else if (rank.equals("FOUR")) value += 4;
-                        else if (rank.equals("THREE")) value += 3;
-                        else if (rank.equals("TWO")) value += 2;
+                        switch (rank) {
+                            case "ACE" -> value += 11;
+                            case "KING", "QUEEN", "JACK" -> value += 10;
+                            case "TEN" -> value += 10;
+                            case "NINE" -> value += 9;
+                            case "EIGHT" -> value += 8;
+                            case "SEVEN" -> value += 7;
+                            case "SIX" -> value += 6;
+                            case "FIVE" -> value += 5;
+                            case "FOUR" -> value += 4;
+                            case "THREE" -> value += 3;
+                            case "TWO" -> value += 2;
+                            default -> {
+                            }
+                        }
                     }
                 }
             }

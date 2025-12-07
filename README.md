@@ -10,6 +10,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 ### 🎮 Core Gameplay
 - **Classic Blackjack Rules** - Play traditional Blackjack against the dealer
 - **Full Betting System** - Place bets with virtual chips ($5, $10, $25, $50)
+- **Clear Bet** - Clear your current bet before dealing to adjust your wager
 - **Double Down** - Double your bet and take exactly one more card
 - **Win Streaks** - Track your consecutive wins
 - **Smart Dealer AI** - Dealer behavior adapts to difficulty settings
@@ -18,15 +19,23 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 ### 💰 Virtual Economy
 - **Persistent Chip Balance** - Your chips are automatically saved and restored between sessions
 - **Virtual Chip Purchases** - Buy more chips with test payment system
-- **Multiple Chip Packages** - Choose from 6 different chip packages (50 to 5000 chips)
+- **Multiple Chip Packages**:
+  - 50 chips - $5
+  - 100 chips - $10
+  - 250 chips - $20
+  - 500 chips - $35
+  - 1000 chips - $60
+  - 5000 chips - $250
+- **Test Card Support** - Use the "Use Test Card" button to auto-fill valid test card details
 - **Starting Balance** - Begin with 100 chips
+- **Out of Chips** - When balance reaches $0, betting is disabled until chips are purchased
 
 ### 🎨 Customization
 - **Background Themes**
   - Default Dark Theme (free)
   - Green Poker Table (purchasable with 150 chips)
+  - Animated Menu Background (purchasable with 200 chips)
 - **Custom Card Images** - High-quality PNG card graphics
-- **Animated Menu** - Dynamic background with moving gradients
 - **Full-Screen Mode** - Immersive, distraction-free gaming
 
 ### ⚙️ Game Settings
@@ -38,7 +47,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Luck Levels**
   - Normal: Standard blackjack odds
   - Lucky: 10% bonus on wins, 15% chance to win on push
-  - Very Lucky: 25% bonus on wins, 25% chance to win on push, 10% chance to recover losses
+  - Very Lucky: 25% bonus on wins, 25% chance to win on push, 10% chance bet is returned on loss
 
 - **Audio Settings**
   - Sound Volume: Off / Low / Medium / High

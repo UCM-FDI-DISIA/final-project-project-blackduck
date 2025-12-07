@@ -147,7 +147,6 @@ public class AudioManager {
      */
     public void playBackgroundMusic() {
         if (!musicEnabled || volumeLevel == 0) {
-            System.out.println("Music not playing: musicEnabled=" + musicEnabled + ", volumeLevel=" + volumeLevel);
             return;
         }
 
@@ -158,11 +157,9 @@ public class AudioManager {
             try {
                 File musicFile = new File("src/data/audio/background_music.wav");
                 if (!musicFile.exists()) {
-                    System.err.println("Background music file not found: " + musicFile.getAbsolutePath());
                     return; // File not found, silently fail
                 }
 
-                System.out.println("Starting background music...");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(musicFile);
                 backgroundMusicClip = AudioSystem.getClip();
                 backgroundMusicClip.open(audioIn);
@@ -173,10 +170,8 @@ public class AudioManager {
                 // Loop continuously
                 backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
                 backgroundMusicClip.start();
-                System.out.println("Background music started successfully!");
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-                System.err.println("Error playing background music: " + e.getMessage());
-                e.printStackTrace();
+                // Silently fail - audio is optional
             }
         }).start();
     }

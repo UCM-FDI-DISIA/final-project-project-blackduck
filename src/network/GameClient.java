@@ -12,7 +12,7 @@ public class GameClient {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean connected;
-    private ClientListener listener;
+    private final ClientListener listener;
 
     public interface ClientListener {
         void onConnected();
@@ -82,14 +82,6 @@ public class GameClient {
     public void placeBet(int amount) {
         GameMessage msg = new GameMessage(GameMessage.MessageType.PLACE_BET);
         msg.setBetAmount(amount);
-        sendMessage(msg);
-    }
-
-    /**
-     * Request to deal cards
-     */
-    public void dealCards() {
-        GameMessage msg = new GameMessage(GameMessage.MessageType.DEAL_CARDS);
         sendMessage(msg);
     }
 

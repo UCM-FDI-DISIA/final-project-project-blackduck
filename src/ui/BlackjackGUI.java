@@ -8,8 +8,6 @@ import static ui.UIConstants.*;
 
 import javax.swing.*;
 
-import static java.lang.Thread.sleep;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -125,6 +123,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
     }
 
     // ---------- MENU UI ----------
+    @SuppressWarnings("unused")
     private JPanel createMenuPanel() {
         JPanel panel;
 
@@ -187,13 +186,10 @@ public class BlackjackGUI extends JFrame implements ActionListener {
 
             MultiplayerDialog.Mode mode = dialog.getSelectedMode();
             if (mode == MultiplayerDialog.Mode.HOST) {
-                // Start server (dealer) mode
-                new MultiplayerServerGUI();
                 dispose(); // Close the main menu
             } else if (mode == MultiplayerDialog.Mode.JOIN) {
                 // Start client (player) mode
                 String serverIP = dialog.getServerIP();
-                new MultiplayerClientGUI(serverIP);
                 dispose(); // Close the main menu
             }
         });
@@ -839,10 +835,6 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
     private void showWarning(String message) {
         JOptionPane.showMessageDialog(this, message, "Warning", JOptionPane.WARNING_MESSAGE);
     }
@@ -1064,48 +1056,48 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         }
 
         // Dealer hit threshold based on difficulty
-        int dealerThreshold = 17;
+        final int dealerThreshold;
         switch (difficulty) {
             case 1 -> dealerThreshold = 16; // Easy: Dealer hits on 16 or less
             case 2 -> dealerThreshold = 17; // Medium: Standard blackjack rules
             case 3 -> dealerThreshold = 17; // Hard: Dealer is smarter with soft hands
-            default -> {
-            }
+            default -> dealerThreshold = 17;
         }
 
-        while (dealerHand.getValue() < dealerThreshold) {
-            Card drawn = deck.drawCard();
-            dealerHand.addCard(drawn);
-            updateLabels(true);
-            try {
-                sleep(250);
-            } catch (InterruptedException ignored) {}
-        }
-
-        // On hard difficulty, dealer might hit on soft 17
-        if (difficulty == 3 && dealerHand.getValue() == 17) {
-            // Check if dealer has an Ace counting as 11 (soft 17)
-            boolean hasSoftAce = false;
-            int valueWithoutAce = 0;
-            for (Card c : dealerHand.getCards()) {
-                if (c.getRank().getValue() == 1) { // Ace
-                    valueWithoutAce = dealerHand.getValue() - 11;
-                    if (valueWithoutAce + 1 <= 10) {
-                        hasSoftAce = true;
-                        break;
-                    }
-                }
-            }
-            if (hasSoftAce && dealerHand.getValue() == 17) {
+        // Use Timer to animate dealer draws without blocking the EDT
+        Timer dealerTimer = new Timer(250, null);
+        dealerTimer.addActionListener(e -> {
+            if (dealerHand.getValue() < dealerThreshold) {
                 Card drawn = deck.drawCard();
                 dealerHand.addCard(drawn);
                 updateLabels(true);
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException ignored) {}
+            } else {
+                dealerTimer.stop();
+                // Check for soft 17 on hard difficulty
+                if (difficulty == 3 && dealerHand.getValue() == 17 && hasSoftAce()) {
+                    Card drawn = deck.drawCard();
+                    dealerHand.addCard(drawn);
+                    updateLabels(true);
+                }
+                finishDealerTurn();
+            }
+        });
+        dealerTimer.start();
+    }
+
+    private boolean hasSoftAce() {
+        for (Card c : dealerHand.getCards()) {
+            if (c.getRank().getValue() == 1) { // Ace
+                int valueWithoutAce = dealerHand.getValue() - 11;
+                if (valueWithoutAce + 1 <= 10) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
 
+    private void finishDealerTurn() {
         int playerValue = playerHand.getValue();
         int dealerValue = dealerHand.getValue();
 

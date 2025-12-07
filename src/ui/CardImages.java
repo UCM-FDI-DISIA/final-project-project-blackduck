@@ -82,10 +82,6 @@ public class CardImages {
         if (f != null && f.exists()) {
             ImageIcon icon = new ImageIcon(f.getPath());
             return scaleIcon(icon, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
-        } else {
-            // Debug: print when file not found and working directory
-            System.err.println("Card image not found: " + filename);
-            System.err.println("Working directory: " + System.getProperty("user.dir"));
         }
         Color tint = Color.LIGHT_GRAY;
         return createPlaceholder(code, tint);

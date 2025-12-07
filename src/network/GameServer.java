@@ -19,7 +19,7 @@ public class GameServer {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean running;
-    private ServerListener listener;
+    private final ServerListener listener;
 
     private Deck deck;
     private Hand playerHand;
@@ -52,7 +52,8 @@ public class GameServer {
     }
 
     public void start(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+        // Bind to all network interfaces (0.0.0.0) to accept connections from other machines
+        serverSocket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
         running = true;
 
         new Thread(() -> {
@@ -104,27 +105,23 @@ public class GameServer {
      */
     private void handleMessage(GameMessage message) {
         switch (message.getType()) {
-            case PLACE_BET:
+            case PLACE_BET -> {
                 currentBet = message.getBetAmount();
                 listener.onGameStateChanged("Player placed bet: $" + currentBet);
-                break;
+            }
 
-            case DEAL_CARDS:
-                // Player requests to deal - ignored, dealer controls this now
-                break;
+            case DEAL_CARDS -> {
+            }
 
-            case PLAYER_ACTION:
-                handlePlayerAction(message.getAction());
-                break;
+            case PLAYER_ACTION -> handlePlayerAction(message.getAction());
 
-            case DISCONNECT:
-                listener.onClientDisconnected();
-                break;
+            case DISCONNECT -> listener.onClientDisconnected();
 
-            default:
-                break;
+            default -> {
+            }
         }
-    }
+        // Player requests to deal - ignored, dealer controls this now
+            }
 
     /**
      * Start the game - called by dealer when ready
@@ -182,7 +179,7 @@ public class GameServer {
         if (action == null) return;
 
         switch (action) {
-            case HIT:
+            case HIT -> {
                 Card drawnCard = deck.drawCard();
                 playerHand.addCard(drawnCard);
 
@@ -206,9 +203,9 @@ public class GameServer {
                 }
 
                 sendMessage(hitMsg);
-                break;
+            }
 
-            case STAND:
+            case STAND -> {
                 isPlayerTurn = false;
                 listener.onGameStateChanged("Player stands. Your turn!");
                 listener.onTurnChanged(true); // Dealer's turn
@@ -219,9 +216,9 @@ public class GameServer {
                 waitMsg.setPlayerTurn(false);
                 waitMsg.setDealerTurn(true);
                 sendMessage(waitMsg);
-                break;
+            }
 
-            case DOUBLE_DOWN:
+            case DOUBLE_DOWN -> {
                 Card doubleCard = deck.drawCard();
                 playerHand.addCard(doubleCard);
                 currentBet *= 2;
@@ -257,7 +254,7 @@ public class GameServer {
                     waitMsg2.setDealerTurn(true);
                     sendMessage(waitMsg2);
                 }
-                break;
+            }
         }
     }
 
@@ -366,23 +363,33 @@ public class GameServer {
     }
 
     /**
-     * Helper method to serialize cards as a string
-     */
-    private String serializeCards(List<Card> cards) {
-        StringBuilder sb = new StringBuilder();
-        for (Card card : cards) {
-            sb.append(card.toString()).append(";");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Get the server's IP address
+     * Get the server's IP address (actual network IP, not localhost)
      */
     public String getIPAddress() {
         try {
+            // Try to get the actual network IP address
+            java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface.getNetworkInterfaces();
+
+            while (interfaces.hasMoreElements()) {
+                java.net.NetworkInterface iface = interfaces.nextElement();
+                // Skip loopback and inactive interfaces
+                if (iface.isLoopback() || !iface.isUp()) {
+                    continue;
+                }
+
+                java.util.Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    // Get IPv4 address only
+                    if (addr instanceof java.net.Inet4Address && !addr.isLoopbackAddress()) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+
+            // Fallback to localhost if no network interface found
             return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
+        } catch (SocketException | UnknownHostException e) {
             return "Unknown";
         }
     }

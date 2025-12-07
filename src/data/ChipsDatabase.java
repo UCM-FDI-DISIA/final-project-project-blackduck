@@ -18,7 +18,7 @@ public class ChipsDatabase {
     private static final int DEFAULT_CHIPS = 100;
     private static final int DEFAULT_VOLUME = 2; // 0=Off, 1=Low, 2=Medium, 3=High
 
-    private Properties properties;
+    private final Properties properties;
 
     public ChipsDatabase() {
         properties = new Properties();
