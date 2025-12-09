@@ -14,7 +14,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Double Down** - Double your bet and take exactly one more card
 - **Win Streaks** - Track your consecutive wins
 - **Smart Dealer AI** - Dealer behavior adapts to difficulty settings
-- **🌐 LAN Multiplayer** - Play dealer vs player over local network
+- **🌐 LAN Multiplayer** - Play dealer vs player over local network(currently, this application feature is only working on two instances of a single PC)
 
 ### 💰 Virtual Economy
 - **Persistent Chip Balance** - Your chips are automatically saved and restored between sessions
