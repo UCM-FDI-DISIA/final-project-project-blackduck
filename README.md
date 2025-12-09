@@ -242,11 +242,11 @@ Open the project in your favorite Java IDE and run `BlackjackGUI.java`
 
 ## Credits
 
-Developed as a final project for CS course.
+Developed as a final project for SE1course.
 
 ## License
 
-Educational project - see your course guidelines for usage restrictions.
+Educational project 
 
 ---
 
