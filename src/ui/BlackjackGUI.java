@@ -187,10 +187,18 @@ public class BlackjackGUI extends JFrame implements ActionListener {
             MultiplayerDialog.Mode mode = dialog.getSelectedMode();
             if (mode == MultiplayerDialog.Mode.HOST) {
                 dispose(); // Close the main menu
+                SwingUtilities.invokeLater(() -> {
+                    MultiplayerServerGUI serverGUI = new MultiplayerServerGUI();
+                    serverGUI.setVisible(true);
+                });
             } else if (mode == MultiplayerDialog.Mode.JOIN) {
                 // Start client (player) mode
                 String serverIP = dialog.getServerIP();
                 dispose(); // Close the main menu
+                SwingUtilities.invokeLater(() -> {
+                    MultiplayerClientGUI clientGUI = new MultiplayerClientGUI(serverIP);
+                    clientGUI.setVisible(true);
+                });
             }
         });
 
