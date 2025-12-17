@@ -2,17 +2,15 @@ package ui;
 
 import data.Card;
 import data.ChipsDatabase;
-import logic.Deck;
-import logic.Hand;
-import static ui.UIConstants.*;
-
-import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.*;
+import logic.Deck;
+import logic.Hand;
+import static ui.UIConstants.*;
 
 public class BlackjackGUI extends JFrame implements ActionListener {
 
@@ -137,11 +135,6 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         panel.setLayout(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
-        // Title
-        JLabel titleLabel = new JLabel("BLACKDUCK", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE_TITLE));
-        titleLabel.setForeground(Color.WHITE);
-
         // Logo
         JLabel logoLabel = new JLabel("", SwingConstants.CENTER);
         try {
@@ -224,7 +217,6 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         buttonPanel.add(settingsButton);
         buttonPanel.add(quitButton);
 
-        panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(logoLabel, BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
