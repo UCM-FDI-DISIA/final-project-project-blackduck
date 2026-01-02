@@ -14,7 +14,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Double Down** - Double your bet and take exactly one more card
 - **Win Streaks** - Track your consecutive wins
 - **Smart Dealer AI** - Dealer behavior adapts to difficulty settings
-- **🌐 Multiplayer (Beta)** - Play dealer vs player on the same PC using multiple instances
+- **🌐 LAN Multiplayer** - Play dealer vs player over local network(currently, this application feature is only working on two instances of a single PC)
 
 ### 💰 Virtual Economy
 - **Persistent Chip Balance** - Your chips are automatically saved and restored between sessions
@@ -249,11 +249,11 @@ Open the project in your favorite Java IDE and run `BlackjackGUI.java`
 
 ## Credits
 
-Developed as a final project for CS course.
+Developed as a final project for SE1course.
 
 ## License
 
-Educational project - see your course guidelines for usage restrictions.
+Educational project 
 
 ---
 
