@@ -15,8 +15,12 @@ public class ChipsDatabase {
     private static final String CURRENT_BACKGROUND_KEY = "currentBackground";
     private static final String VOLUME_LEVEL_KEY = "volumeLevel";
     private static final String MUSIC_ENABLED_KEY = "musicEnabled";
+    private static final String DIFFICULTY_KEY = "difficulty";
+    private static final String LUCK_LEVEL_KEY = "luckLevel";
     private static final int DEFAULT_CHIPS = 100;
     private static final int DEFAULT_VOLUME = 2; // 0=Off, 1=Low, 2=Medium, 3=High
+    private static final int DEFAULT_DIFFICULTY = 1; // 1=Easy, 2=Medium, 3=Hard
+    private static final int DEFAULT_LUCK_LEVEL = 1; // 1=Normal, 2=Lucky, 3=Very Lucky
 
     private final Properties properties;
 
@@ -54,6 +58,8 @@ public class ChipsDatabase {
         properties.setProperty(CURRENT_BACKGROUND_KEY, "default");
         properties.setProperty(VOLUME_LEVEL_KEY, String.valueOf(DEFAULT_VOLUME));
         properties.setProperty(MUSIC_ENABLED_KEY, "true");
+        properties.setProperty(DIFFICULTY_KEY, String.valueOf(DEFAULT_DIFFICULTY));
+        properties.setProperty(LUCK_LEVEL_KEY, String.valueOf(DEFAULT_LUCK_LEVEL));
     }
 
     /**
@@ -175,6 +181,46 @@ public class ChipsDatabase {
      */
     public void resetToDefaults() {
         initializeDefaults();
+        saveDatabase();
+    }
+
+    /**
+     * Get difficulty level (1=Easy, 2=Medium, 3=Hard)
+     */
+    public int getDifficulty() {
+        String value = properties.getProperty(DIFFICULTY_KEY, String.valueOf(DEFAULT_DIFFICULTY));
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return DEFAULT_DIFFICULTY;
+        }
+    }
+
+    /**
+     * Save difficulty level
+     */
+    public void saveDifficulty(int difficulty) {
+        properties.setProperty(DIFFICULTY_KEY, String.valueOf(difficulty));
+        saveDatabase();
+    }
+
+    /**
+     * Get luck level (1=Normal, 2=Lucky, 3=Very Lucky)
+     */
+    public int getLuckLevel() {
+        String value = properties.getProperty(LUCK_LEVEL_KEY, String.valueOf(DEFAULT_LUCK_LEVEL));
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return DEFAULT_LUCK_LEVEL;
+        }
+    }
+
+    /**
+     * Save luck level
+     */
+    public void saveLuckLevel(int luckLevel) {
+        properties.setProperty(LUCK_LEVEL_KEY, String.valueOf(luckLevel));
         saveDatabase();
     }
 }

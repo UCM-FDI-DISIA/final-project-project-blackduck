@@ -76,6 +76,8 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         ownGreenTable = database.getOwnGreenTable();
         ownAnimatedBackground = database.getOwnAnimatedBackground();
         currentBackground = database.getCurrentBackground();
+        difficulty = database.getDifficulty();
+        luckLevel = database.getLuckLevel();
 
         // Initialize audio with saved settings
         AudioManager audio = AudioManager.getInstance();
@@ -432,6 +434,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         difficultyCombo.setFont(new Font("SansSerif", Font.BOLD, 16));
         difficultyCombo.addActionListener(e -> {
             difficulty = difficultyCombo.getSelectedIndex() + 1;
+            database.saveDifficulty(difficulty);
         });
 
         JPanel difficultyContentPanel = new JPanel(new GridLayout(2, 1, 5, 5));
@@ -466,6 +469,7 @@ public class BlackjackGUI extends JFrame implements ActionListener {
         luckCombo.setFont(new Font("SansSerif", Font.BOLD, 16));
         luckCombo.addActionListener(e -> {
             luckLevel = luckCombo.getSelectedIndex() + 1;
+            database.saveLuckLevel(luckLevel);
         });
 
         JPanel luckContentPanel = new JPanel(new GridLayout(2, 1, 5, 5));

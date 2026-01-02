@@ -14,7 +14,7 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 - **Double Down** - Double your bet and take exactly one more card
 - **Win Streaks** - Track your consecutive wins
 - **Smart Dealer AI** - Dealer behavior adapts to difficulty settings
-- **🌐 LAN Multiplayer** - Play dealer vs player over local network
+- **🌐 Multiplayer (Beta)** - Play dealer vs player on the same PC using multiple instances
 
 ### 💰 Virtual Economy
 - **Persistent Chip Balance** - Your chips are automatically saved and restored between sessions
@@ -61,6 +61,8 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
   - Selected background
   - Volume level
   - Music on/off preference
+  - Difficulty level
+  - Luck level
 
 ### 🎯 User Interface
 - **Intuitive Controls**
@@ -99,12 +101,14 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 ### ⌨️ Keyboard Shortcuts
 - **ESC** - Exit the application
 
-### 🌐 Multiplayer Mode (NEW!)
+### 🌐 Multiplayer Mode (BETA)
 - **Host Game (Dealer)** - Start a server and act as the dealer for another player
 - **Join Game (Player)** - Connect to a dealer's server and play as a remote player
-- **LAN Support** - Play over local network (requires same network or direct IP connection)
+- **Same-PC Testing** - Currently works by running two instances on the same computer (use `localhost` or `127.0.0.1` to connect)
 - **Real-time Gameplay** - All actions synchronized between dealer and player
-- **Server Info Display** - Dealer can see their IP address for easy connection sharing
+- **Server Info Display** - Dealer can see their IP address for connection sharing
+
+> **Note:** Multiplayer is currently in beta. Chip balances in multiplayer mode are session-only and not saved to the database. For persistent chip tracking, use single-player mode.
 
 ## How to Play
 
@@ -120,23 +124,25 @@ A feature-rich, full-screen Blackjack game built with Java Swing, featuring pers
 5. **Win or Lose** - Beat the dealer without going over 21
 6. **Repeat** - Place a new bet and play another round
 
-### Multiplayer Mode
+### Multiplayer Mode (Beta)
+
+> **Current Limitation:** Multiplayer currently works best when running two instances on the same computer. Use `localhost` or `127.0.0.1` as the IP address to connect.
 
 #### As Dealer (Host):
 1. **Click "Multiplayer"** from the main menu
 2. **Select "Host Game"** - Server starts automatically on port 7777
-3. **Share Your IP** - Your IP address is displayed on screen
+3. **Note Your IP** - Your IP address is displayed on screen (use `localhost` for same-PC testing)
 4. **Wait for Player** - Game begins when a player connects
 5. **Monitor Game** - Watch the player's actions and dealer responses in real-time
 6. **View Logs** - Server activity logged in the bottom panel
 
 #### As Player (Client):
 1. **Click "Multiplayer"** from the main menu
-2. **Select "Join Game"** and enter the dealer's IP address
+2. **Select "Join Game"** and enter the dealer's IP address (use `localhost` for same-PC testing)
 3. **Connect** - Wait for connection confirmation
 4. **Place Bets** - Use betting buttons like in single-player mode
 5. **Play Cards** - Hit, Stand, or Double Down as usual
-6. **Results** - Chips automatically updated based on game outcome
+6. **Results** - Chips updated based on game outcome (session-only, not saved)
 
 ## Winning Conditions
 
@@ -202,13 +208,14 @@ src/
 - **Enum-Based Design** - Card ranks and suits use enums with display methods
 - **Helper Methods** - Dialog helpers and graphics utilities reduce boilerplate
 
-### Multiplayer Networking
+### Multiplayer Networking (Beta)
 - **TCP Sockets** - Reliable connection between dealer and player
 - **Object Serialization** - Game state transmitted as serializable objects
 - **Message Protocol** - Comprehensive GameMessage class handles all game events
 - **Threaded I/O** - Non-blocking network communication
 - **Real-time Sync** - Card deals, bets, and results synchronized instantly
-- **Default Port** - Uses port 7777 (configurable)
+- **Default Port** - Uses port 7777
+- **Current Status** - Beta feature, tested with same-PC instances using localhost
 
 ### Performance Optimizations
 - **Image Caching** - Card images are cached to prevent redundant loading
